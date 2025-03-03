@@ -38,7 +38,9 @@
         <img src="images/logo-transparent-medium.png" alt="Betpuck Logo">
     </div>
     
-    <div class="terms english" style="display:none;>
+	<button id="langButton" onclick="toggleLanguage()">Switch to English</button>
+	
+    <div class="terms english" style="display:block;>
         <h1>Terms and Conditions</h1>
     
 		<p class="effective-date">Effective as of 09/02/2025</p>
@@ -366,8 +368,7 @@
 		<p>Pour toute question relative à l'application des présentes CGU, vous pouvez joindre l'éditeur aux coordonnées inscrites à l'ARTICLE 1.</p>
 	</div>
 	
-	<button id="langButton" onclick="toggleLanguage()">Switch to English</button>
-	
+
     <script>
         function toggleLanguage() {
             var englishContent = document.querySelector('.english');
