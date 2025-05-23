@@ -13,9 +13,31 @@
     if (code) {
       document.getElementById('result').innerHTML =
         `<p>Copy this code and paste it into your app:</p>
-         <pre>${code}</pre>`;
+         <pre id="auth-code" style="user-select:all;cursor:pointer;">${code}</pre>
+         <button onclick="copyCode()">Copy</button>
+         <span id="copied-msg" style="color:green;display:none;">Copied!</span>`;
     } else {
       document.getElementById('result').textContent = 'No code found in URL.';
+    }
+
+    function copyCode() {
+      const codeElem = document.getElementById('auth-code');
+      const range = document.createRange();
+      range.selectNodeContents(codeElem);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+
+      try {
+        document.execCommand('copy');
+        document.getElementById('copied-msg').style.display = 'inline';
+        setTimeout(() => {
+          document.getElementById('copied-msg').style.display = 'none';
+        }, 1500);
+      } catch (err) {
+        alert('Failed to copy!');
+      }
+      sel.removeAllRanges();
     }
   </script>
 </body>
