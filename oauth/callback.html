@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Betpuck OAuth2 Callback</title>
+</head>
+<body>
+  <h2>Google OAuth2 Callback</h2>
+  <div id="result"></div>
+  <script>
+    // Parse the query string for the code
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    if (code) {
+      document.getElementById('result').innerHTML =
+        `<p>Copy this code and paste it into your app:</p>
+         <pre>${code}</pre>`;
+    } else {
+      document.getElementById('result').textContent = 'No code found in URL.';
+    }
+  </script>
+</body>
+</html>
