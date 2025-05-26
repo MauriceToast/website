@@ -1,23 +1,123 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Betpuck OAuth2 Callback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .logo {
+      margin-bottom: 30px;
+      text-align: center;
+      width: 300px;
+    }
+    .logo img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+    .content {
+      background-color: #fff;
+      padding: 30px 40px;
+      border-radius: 8px;
+      max-width: 600px;
+      width: 90%;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h2 {
+      color: #0055a5;
+      margin-bottom: 25px;
+      text-align: center;
+    }
+    pre#auth-code {
+      user-select: all;
+      cursor: pointer;
+      font-size: 1.4rem;
+      background: #f7f9fc;
+      padding: 15px 20px;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 500px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+      text-align: center;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+    }
+    button.copy-btn {
+      background-color: #0055a5;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 1.2rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      max-width: 200px;
+      box-shadow: 0 4px 8px rgba(0,85,165,0.3);
+    }
+    button.copy-btn:hover {
+      background-color: #003d7a;
+      box-shadow: 0 6px 12px rgba(0,61,122,0.5);
+    }
+    #copied-msg {
+      color: #28a745;
+      margin-top: 12px;
+      font-weight: bold;
+      display: none;
+      font-size: 1.1rem;
+    }
+  </style>
 </head>
 <body>
-  <h2>Google OAuth2 Callback</h2>
-  <div id="result"></div>
+  <div class="logo">
+    <img src="../images/logo-transparent-medium.png" alt="Betpuck Logo" />
+  </div>
+
+  <div class="content">
+    <h2>Google OAuth2 Callback</h2>
+    <div id="result"></div>
+  </div>
+
   <script>
-    // Parse the query string for the code
     const params = new URLSearchParams(window.location.search);
     const code = params.get('code');
+    const resultDiv = document.getElementById('result');
+
     if (code) {
-      document.getElementById('result').innerHTML =
-        `<p>Copy this code and paste it into your app:</p>
-         <pre id="auth-code" style="user-select:all;cursor:pointer;">${code}</pre>
-         <button onclick="copyCode()">Copy</button>
-         <span id="copied-msg" style="color:green;display:none;">Copied!</span>`;
+      resultDiv.innerHTML = `
+        <p>Copy this code and paste it into your app:</p>
+        <pre id="auth-code">${code}</pre>
+        <button class="copy-btn" onclick="copyCode()">Copy</button>
+        <div id="copied-msg">Copied!</div>
+      `;
+
+      // Allow clicking the code block to select all text
+      const authCodeElem = document.getElementById('auth-code');
+      authCodeElem.addEventListener('click', () => {
+        const range = document.createRange();
+        range.selectNodeContents(authCodeElem);
+        const sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      });
     } else {
-      document.getElementById('result').textContent = 'No code found in URL.';
+      resultDiv.textContent = 'No code found in URL.';
     }
 
     function copyCode() {
@@ -30,10 +130,9 @@
 
       try {
         document.execCommand('copy');
-        document.getElementById('copied-msg').style.display = 'inline';
-        setTimeout(() => {
-          document.getElementById('copied-msg').style.display = 'none';
-        }, 1500);
+        const msg = document.getElementById('copied-msg');
+        msg.style.display = 'block';
+        setTimeout(() => { msg.style.display = 'none'; }, 1500);
       } catch (err) {
         alert('Failed to copy!');
       }
